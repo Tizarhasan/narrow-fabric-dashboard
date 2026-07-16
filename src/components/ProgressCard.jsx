@@ -8,9 +8,9 @@ export default function ProgressCard({ counter, target }) {
 
   return (
     <div className="bg-white rounded-xl p-5 border border-slate-200 mb-4">
-      <div className="flex justify-between items-center mb-3">
-        <span className="font-semibold text-slate-800">Progress produksi</span>
-        <span className={`text-xl font-bold ${pctColor}`}>{pct}%</span>
+      <div className="flex justify-between items-center mb-3 gap-2">
+        <span className="font-semibold text-slate-800 text-sm sm:text-base">Progress produksi</span>
+        <span className={`text-xl sm:text-2xl font-bold ${pctColor}`}>{pct}%</span>
       </div>
       <div className="bg-slate-100 rounded-full h-3 overflow-hidden">
         <div

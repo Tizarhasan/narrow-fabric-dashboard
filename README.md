@@ -63,14 +63,9 @@ Data dikirim secara realtime ke Firebase dan dapat dipantau melalui dashboard we
 | LED Hijau | Indikator target tercapai |
 
 ### Konfigurasi Pin
-
 | Pin ESP8266 | Fungsi |
 |---|---|
 | D1 (SCL) | LCD I2C Clock |
-| D2 (SDA) | LCD I2C Data |
-| D3 | LED Kuning |
-| D4 | LED Hijau |
-| D5 | Sensor IR Input |
 | D6 | Push Button Reset |
 | D7 | LED Merah |
 
@@ -309,7 +304,3 @@ npm run dev
 - [ ] Aplikasi Android untuk monitoring mobile
 
 ---
-
-## Catatan
-
-Project ini dikembangkan sebagai sistem aktualisasi produksi berbasis IoT untuk mesin narrow fabric. Semua konfigurasi sensitif (API key, database secret, password WiFi) tidak boleh di-commit ke repository publik. Gunakan file `.env` untuk menyimpan konfigurasi rahasia.

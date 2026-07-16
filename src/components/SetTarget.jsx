@@ -25,18 +25,18 @@ export default function SetTarget({ currentTarget }) {
   return (
     <div className="bg-white rounded-xl p-5 border border-slate-200 mb-4">
       <h3 className="font-semibold text-slate-800 mb-3">⚙️ Set target produksi</h3>
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="number"
           value={input}
           onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSet()}
           placeholder="Masukkan jumlah target putaran..."
-          className="flex-1 border border-slate-200 rounded-lg px-4 py-2 text-slate-800 outline-none focus:border-blue-400"
+          className="w-full sm:flex-1 border border-slate-200 rounded-lg px-4 py-2 text-slate-800 outline-none focus:border-blue-400"
         />
         <button
           onClick={handleSet}
-          className="bg-slate-800 text-white px-5 py-2 rounded-lg font-medium hover:bg-slate-700 transition"
+          className="w-full sm:w-auto bg-slate-800 text-white px-5 py-2 rounded-lg font-medium hover:bg-slate-700 transition"
         >
           Simpan
         </button>

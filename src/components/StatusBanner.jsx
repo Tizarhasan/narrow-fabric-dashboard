@@ -8,12 +8,12 @@ const statusMap = {
 export default function StatusBanner({ status }) {
   const s = statusMap[status] || statusMap.IDLE;
   return (
-    <div className={`${s.bg} rounded-xl p-4 flex items-center justify-between mb-4`}>
+    <div className={`${s.bg} rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row gap-2 sm:gap-0 items-start sm:items-center justify-between mb-4`}>
       <div className="flex items-center gap-3">
         <span className="text-2xl">{s.icon}</span>
         <div>
-          <div className="font-semibold text-slate-800">{s.label}</div>
-          <div className="text-sm text-slate-500">{s.sub}</div>
+          <div className="font-semibold text-slate-800 text-sm sm:text-base">{s.label}</div>
+          <div className="text-xs sm:text-sm text-slate-500">{s.sub}</div>
         </div>
       </div>
     </div>

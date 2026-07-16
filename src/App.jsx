@@ -74,19 +74,19 @@ export default function App() {
     <div className="min-h-screen bg-slate-100">
 
       {/* HEADER */}
-      <div className="bg-slate-800 text-white px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold">🧵 Monitoring Produksi Narrow Fabric</h1>
+      <div className="bg-slate-800 text-white px-4 sm:px-6 py-4 flex flex-wrap gap-2 sm:gap-0 items-center justify-between">
+        <div className="min-w-0">
+          <h1 className="text-base sm:text-lg font-semibold leading-tight">🧵 Monitoring Produksi Narrow Fabric</h1>
           <p className="text-xs text-slate-400 mt-0.5">Dashboard realtime berbasis IoT</p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-full text-xs text-slate-400">
+        <div className="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-full text-xs sm:text-sm text-slate-400 whitespace-nowrap">
           <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-400 animate-pulse' : 'bg-red-400'}`} />
           {connected ? `Terhubung · ${lastUpdate}` : 'Tidak terhubung'}
         </div>
       </div>
 
       {/* CONTENT */}
-      <div className="max-w-3xl mx-auto px-4 py-6">
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 py-6">
 
         {/* STATUS */}
         <StatusBanner status={data.status} />
