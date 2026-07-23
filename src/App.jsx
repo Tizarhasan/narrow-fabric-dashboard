@@ -97,9 +97,9 @@ export default function App() {
 
         {/* METRICS BARIS 1 — Counter, Target, Sisa */}
         <div className="grid grid-cols-3 gap-3 mb-3">
+          <MetricCard icon="🔄" label="Counter" value={data.counter}                         unit="putaran roller" />
           <MetricCard icon="🎯" label="Target"  value={data.target > 0 ? data.target : '—'}  unit="putaran" />
           <MetricCard icon="⏳" label="Sisa"    value={sisa}                                  unit="putaran lagi" />
-          <MetricCard icon="🔄" label="Counter" value={data.counter}                         unit="putaran roller" />
         </div>
 
         {/* METRICS BARIS 2 — Target panjang, Panjang kain */}
