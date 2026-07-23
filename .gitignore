@@ -1,4 +1,11 @@
-# Logs
+node_modules/
+dist/
+/.env
+.env.local
+.env.*.local
+.DS_Store
+/.vite
+.history# Logs
 logs
 *.log
 npm-debug.log*

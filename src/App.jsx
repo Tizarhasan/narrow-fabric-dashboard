@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { db } from './firebase';
 
-import StatusBanner from './components/StatusBanner';
-import MetricCard from './components/MetricCard';
-import ProgressCard from './components/ProgressCard';
-import SetTarget from './components/SetTarget';
-import ActivityLog from './components/ActivityLog';
+import StatusBanner  from './components/StatusBanner';
+import MetricCard    from './components/MetricCard';
+import ProgressCard  from './components/ProgressCard';
+import SetTarget     from './components/SetTarget';
+import ActivityLog   from './components/ActivityLog';
+
+const DIAMETER_CM = 4.0; // harus sama dengan nilai di firmware ESP8266
 
 function nowTime() {
   return new Date().toLocaleTimeString('id-ID', {
@@ -15,19 +17,19 @@ function nowTime() {
 }
 
 export default function App() {
-  const [data, setData]       = useState({ counter: 0, panjang: 0, target: 0, status: 'IDLE' });
-  const [logs, setLogs]       = useState([]);
-  const [connected, setConnected] = useState(false);
+  const [data, setData] = useState({
+    counter: 0, panjang: 0,
+    target: 0, status: 'IDLE'
+  });
+  const [logs, setLogs]             = useState([]);
+  const [connected, setConnected]   = useState(false);
   const [lastUpdate, setLastUpdate] = useState('—');
 
-  const lastCounterRef = { current: null };
-  const lastStatusRef  = { current: null };
+  const lastCounterRef = useRef(null);
+  const lastStatusRef  = useRef(null);
 
   function addLog(icon, text, val) {
-    setLogs(prev => {
-      const newLog = { time: nowTime(), icon, text, val };
-      return [newLog, ...prev].slice(0, 100);
-    });
+    setLogs(prev => [{ time: nowTime(), icon, text, val }, ...prev].slice(0, 100));
   }
 
   useEffect(() => {
@@ -39,7 +41,6 @@ export default function App() {
       const counter = d.counter ?? 0;
       const status  = (d.status ?? 'IDLE').toUpperCase();
 
-      // Log perubahan counter
       if (lastCounterRef.current !== null && counter !== lastCounterRef.current) {
         if (counter === 0) {
           addLog('🔄', 'Counter direset', '0 putaran');
@@ -48,12 +49,11 @@ export default function App() {
         }
       }
 
-      // Log perubahan status
       if (lastStatusRef.current !== null && status !== lastStatusRef.current) {
-        if (status === 'DONE')    addLog('✅', 'Target tercapai!',    `${parseFloat(d.panjang).toFixed(2)} m`);
-        if (status === 'ALMOST')  addLog('⚠️', 'Mendekati target',    `${counter} / ${d.target}`);
-        if (status === 'RUNNING') addLog('▶️', 'Produksi dimulai',    '');
-        if (status === 'IDLE')    addLog('⏸️', 'Produksi berhenti',   '');
+        if (status === 'DONE')    addLog('✅', 'Target tercapai!',      `${parseFloat(d.panjang).toFixed(2)} m`);
+        if (status === 'ALMOST')  addLog('⚠️', 'Mendekati target',      `${counter} / ${d.target}`);
+        if (status === 'RUNNING') addLog('▶️', 'Produksi dimulai',      '');
+        if (status === 'IDLE')    addLog('⏸️', 'Produksi berhenti',     '');
       }
 
       lastCounterRef.current = counter;
@@ -69,6 +69,11 @@ export default function App() {
   }, []);
 
   const sisa = data.target > 0 ? Math.max(0, data.target - data.counter) : '—';
+
+  // Panjang kain target = hasil kalkulasi dari jumlah target counter yang di-set
+  const targetPanjang = data.target > 0
+    ? ((data.target * Math.PI * DIAMETER_CM) / 100).toFixed(2)
+    : '—';
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -88,24 +93,25 @@ export default function App() {
       {/* CONTENT */}
       <div className="max-w-3xl mx-auto px-4 py-6">
 
-        {/* STATUS */}
         <StatusBanner status={data.status} />
 
-        {/* METRICS */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
-          <MetricCard icon="🔄" label="Counter"      value={data.counter}                          unit="putaran roller" />
-          <MetricCard icon="📏" label="Panjang kain" value={parseFloat(data.panjang).toFixed(2)}   unit="meter" />
-          <MetricCard icon="🎯" label="Target"        value={data.target > 0 ? data.target : '—'}  unit="putaran" />
-          <MetricCard icon="⏳" label="Sisa"          value={sisa}                                  unit="putaran lagi" />
+        {/* METRICS BARIS 1 — Counter, Target, Sisa */}
+        <div className="grid grid-cols-3 gap-3 mb-3">
+          <MetricCard icon="🎯" label="Target"  value={data.target > 0 ? data.target : '—'}  unit="putaran" />
+          <MetricCard icon="⏳" label="Sisa"    value={sisa}                                  unit="putaran lagi" />
+          <MetricCard icon="🔄" label="Counter" value={data.counter}                         unit="putaran roller" />
         </div>
 
-        {/* PROGRESS */}
+        {/* METRICS BARIS 2 — Target panjang, Panjang kain */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <MetricCard icon="📐" label="Target panjang" value={targetPanjang}                        unit="meter" />
+          <MetricCard icon="📏" label="Panjang kain"    value={parseFloat(data.panjang).toFixed(2)} unit="meter" />
+        </div>
+
         <ProgressCard counter={data.counter} target={data.target} />
 
-        {/* SET TARGET */}
         <SetTarget currentTarget={data.target} />
 
-        {/* LOG */}
         <ActivityLog logs={logs} onClear={() => setLogs([])} />
 
       </div>
